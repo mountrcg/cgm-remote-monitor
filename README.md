@@ -49,23 +49,24 @@ Community maintained fork of the
 
 - [Install](#install)
   - [Supported configurations:](#supported-configurations)
-  - [Minimum browser requirements for viewing the site:](#minimum-browser-requirements-for-viewing-the-site)
+  - [Recommended minimum browser versions for using Nightscout:](#recommended-minimum-browser-versions-for-using-nightscout)
   - [Windows installation software requirements:](#windows-installation-software-requirements)
   - [Installation notes for users with nginx or Apache reverse proxy for SSL/TLS offloading:](#installation-notes-for-users-with-nginx-or-apache-reverse-proxy-for-ssltls-offloading)
   - [Installation notes for Microsoft Azure, Windows:](#installation-notes-for-microsoft-azure-windows)
+- [Development](#development)
 - [Usage](#usage)
   - [Updating my version?](#updating-my-version)
-  - [What is my mongo string?](#what-is-my-mongo-string)
   - [Configure my uploader to match](#configure-my-uploader-to-match)
   - [Nightscout API](#nightscout-api)
       - [Example Queries](#example-queries)
   - [Environment](#environment)
     - [Required](#required)
-    - [Features/Labs](#featureslabs)
+    - [Features](#features)
     - [Alarms](#alarms)
     - [Core](#core)
     - [Predefined values for your browser settings (optional)](#predefined-values-for-your-browser-settings-optional)
     - [Predefined values for your server settings (optional)](#predefined-values-for-your-server-settings-optional)
+    - [Views](#views)
     - [Plugins](#plugins)
       - [Default Plugins](#default-plugins)
         - [`delta` (BG Delta)](#delta-bg-delta)
@@ -97,8 +98,9 @@ Community maintained fork of the
         - [`openaps` (OpenAPS)](#openaps-openaps)
         - [`loop` (Loop)](#loop-loop)
         - [`override` (Override Mode)](#override-override-mode)
-        - [`xdripjs` (xDrip-js)](#xdripjs-xdripjs)
+        - [`xdripjs` (xDrip-js)](#xdripjs-xdrip-js)
         - [`alexa` (Amazon Alexa)](#alexa-amazon-alexa)
+        - [`googlehome` (Google Home/DialogFLow)](#googlehome-google-homedialogflow)
         - [`speech` (Speech)](#speech-speech)
         - [`cors` (CORS)](#cors-cors)
       - [Extended Settings](#extended-settings)
@@ -108,6 +110,7 @@ Community maintained fork of the
   - [Setting environment variables](#setting-environment-variables)
     - [Vagrant install](#vagrant-install)
   - [More questions?](#more-questions)
+    - [Browser testing suite provided by](#browser-testing-suite-provided-by)
   - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -240,10 +243,10 @@ To learn more about the Nightscout API, visit https://YOUR-SITE.com/api-docs/ or
   These alarm setting affect all delivery methods (browser, Pushover, IFTTT, etc.). Values and settings entered here will be the defaults for new browser views, but will be overridden if different choices are made in the settings UI.
 
   * `ALARM_TYPES` (`simple` if any `BG_`* ENV's are set, otherwise `predict`) - currently 2 alarm types are supported, and can be used independently or combined.  The `simple` alarm type only compares the current BG to `BG_` thresholds above, the `predict` alarm type uses highly tuned formula that forecasts where the BG is going based on it's trend.  `predict` **DOES NOT** currently use any of the `BG_`* ENV's
-  * `BG_HIGH` (`260`) - must be set using mg/dl units; the high BG outside the target range that is considered urgent
-  * `BG_TARGET_TOP` (`180`) - must be set using mg/dl units; the top of the target range, also used to draw the line on the chart
-  * `BG_TARGET_BOTTOM` (`80`) - must be set using mg/dl units; the bottom of the target range, also used to draw the line on the chart
-  * `BG_LOW` (`55`) - must be set using mg/dl units; the low BG outside the target range that is considered urgent
+  * `BG_HIGH` (`260`) - the high BG outside the target range that is considered urgent (interprets units based on DISPLAY_UNITS setting)
+  * `BG_TARGET_TOP` (`180`) - the top of the target range, also used to draw the line on the chart (interprets units based on DISPLAY_UNITS setting)
+  * `BG_TARGET_BOTTOM` (`80`) - the bottom of the target range, also used to draw the line on the chart (interprets units based on DISPLAY_UNITS setting)
+  * `BG_LOW` (`55`) - the low BG outside the target range that is considered urgent (interprets units based on DISPLAY_UNITS setting)
   * `ALARM_URGENT_HIGH` (`on`) - possible values `on` or `off`
   * `ALARM_URGENT_HIGH_MINS` (`30 60 90 120`) - Number of minutes to snooze urgent high alarms, space separated for options in browser, first used for pushover
   * `ALARM_HIGH` (`on`) - possible values `on` or `off`
@@ -511,6 +514,9 @@ For remote overrides, the following extended settings must be configured:
 ##### `alexa` (Amazon Alexa)
   Integration with Amazon Alexa, [detailed setup instructions](docs/plugins/alexa-plugin.md)
 
+##### `googlehome` (Google Home/DialogFLow)
+  Integration with Google Home (via DialogFlow), [detailed setup instructions](docs/plugins/googlehome-plugin.md)
+
 ##### `speech` (Speech)
   Speech synthesis plugin. When enabled, speaks out the blood glucose values, IOB and alarms. Note you have to set the LANGUAGE setting on the server to get all translated alarms.
 
@@ -579,7 +585,7 @@ For remote overrides, the following extended settings must be configured:
   Treatment Profile Fields:
 
   * `timezone` (Time Zone) - time zone local to the patient. *Should be set.*
-  * `units` (Profile Units) - blood glucose units used in the profile, either "mgdl" or "mmol"
+  * `units` (Profile Units) - blood glucose units used in the profile, either "mg/dl" or "mmol"
   * `dia` (Insulin duration) - value should be the duration of insulin action to use in calculating how much insulin is left active. Defaults to 3 hours.
   * `carbs_hr` (Carbs per Hour) - The number of carbs that are processed per hour, for more information see [#DIYPS](http://diyps.org/2014/05/29/determining-your-carbohydrate-absorption-rate-diyps-lessons-learned/).
   * `carbratio` (Carb Ratio) - grams per unit of insulin.
